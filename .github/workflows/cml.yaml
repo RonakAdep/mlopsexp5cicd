@@ -1,0 +1,25 @@
+name: experimentno.5
+on:
+  push
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    container: docker://dvcorg/cml-py3:latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up permissions for pip cache
+        run: |
+          sudo chown -R $USER:$USER /github/home/.cache
+
+      - name: Upgrade pip
+        run: |
+          /usr/bin/python3 -m pip install --upgrade pip
+
+      - name: 'Train my model'
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Your ML workflow goes here
+          pip install -r requirements.txt
+          python model.py
